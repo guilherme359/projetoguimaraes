@@ -1,5 +1,9 @@
 <?php
     session_start();
+     if (!isset($_SESSION['usuario'])) {
+    header('Location: index.php');
+    exit;
+  }
     $emails = $_SESSION['emails'];
     $id = array_search($_SESSION['usuario'], $emails);
     $nomes = $_SESSION['nomes'];
@@ -82,7 +86,9 @@
            </div>
         </nav>
         <br/><br/>
-        <center>PESQUISA</center>
+        <center>
+
+        </center>
         <br/><br/>
         <div class="row justify-content-center row-cols-1 row-cols-md-2 text-center">
             <div class="cols">
@@ -93,86 +99,85 @@
                         </svg>&nbsp;<b>LISTAGEM DE USUÁRIOS</b></h3>
                     </div>
                     <div class="card-body">
-                        <table class="table table-hover">
-                            <tr>
-                                <th>ID</th>
-                                <th>NOME</th>
-                                <th>E-MAIL</th>
-                                <th>GENERO</th>
-                                <th>AÇÕES</th>
-                            </tr>
-                            <?php
-                                $reg = count($_SESSION['nomes']);
-                                for ($i=0; $i <= $reg-1 ; $i++) { 
-                                    echo "<tr>";
-                                        echo "<td>$i</td>";
-                                        echo "<td>".$_SESSION['nomes'][$i]."</td>";
-                                        echo "<td>".$_SESSION['emails'][$i]."</td>";
-                                        echo "<td>".$_SESSION['generos'][$i]."</td>";
-                                        echo "<td><svg data-bs-toggle='modal' data-bs-target='#exampleModal' xmlns='http://www.w3.org/2000/svg' width='22' height='22' fill='blue' class='bi bi-pencil' viewBox='0 0 16 16'>
-                                            <path d='M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325'/>
-                                            onclick = 'atualizardados()'</svg> |
-                                             <a href='excluir.php?pos=$i'><svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' fill='red' class='bi bi-trash-fill' viewBox='0 0 16 16'>
-                                            <path d='M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0'/>
-                                            </svg></a></td>";
-                                    echo "</tr>";
-                                }
-                            ?>
-                        </table>
-                    </div>
+                         <table class="table">
+                        <tr>
+                            <th>ID</th>
+                            <th>NOME</th>
+                            <th>E-MAIL</th>
+                            <th>GÊNERO</th>
+                            <th>AÇÕES</th>
+                        </tr>
+                        <?php for ($i=0; $i < count($_SESSION['nomes']); $i++) { ?>
+                        <tr>
+                            <td><?= $i ?></td>
+                            <td><?= htmlspecialchars($_SESSION['nomes'][$i]); ?></td>
+                            <td><?= htmlspecialchars($_SESSION['emails'][$i]); ?></td>
+                            <td><?= htmlspecialchars($_SESSION['generos'][$i]); ?></td>
+                            <td><svg type="button"  onclick="atualizarformulario('<?= $i ?>','<?= htmlspecialchars($_SESSION['emails'][$i]); ?>','<?= htmlspecialchars($_SESSION['nomes'][$i]); ?>','<?= htmlspecialchars($_SESSION['generos'][$i]); ?>','<?= htmlspecialchars($_SESSION['senhas'][$i]); ?>');" data-bs-toggle="modal" data-bs-target="#exampleModal" xmlns="http://www.w3.org/2000/svg" width="20" height="30" fill="currentColor" class="bi bi-pen-fill" viewBox="0 1 16 16">
+                            <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001"/>
+                            </svg> 
+                            <a href="excluir.php?pos=<?= $i ?>">|<svg xmlns="http://www.w3.org/2000/svg" width="20" height="30" fill="currentColor" class="bi bi-trash-fill" viewBox="0 1 16 16">
+                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                            </svg></a></td><?php } ?>
+                        </tr>
+                    </table>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal EDITAR-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-5" id="exampleModalLabel">EDITAR USUARIO</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="form" class="modal-body text-start">
+                     <form id="form_edit" action="cadastro.php" method="post">
+                        <label class="form-label">E-MAIL</label>
+                        <input class="form-control" id="email" type="email" name="email" required autofocus placeholder="Digite o seu e-mail">
+                        <br>
+                        <label class="form-label">NOME</label>
+                        <input class="form-control" type="text" id="nome" name="nome" required  placeholder="Digite o seu nome">
+                        <br>
+                        <label class="form-label">GÊNERO</label>
+                        <select class="form-select" id="floatingSelect" aria-label="Selecione um gênero" name="genero" required>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Feminino">Feminino</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                        <br>
+                        <label class="form-label">SENHA</label>
+                        <input class="form-control" id="senha" type="password" name="senha" required  placeholder="**********">
+                        <br>
+                        <input type="submit" class="btn btn-purple" value="CADASTRAR">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">FECHAR</button>
                 </div>
             </div>
         </div>
-        </div>
-         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">EDITAR USUARIO</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body text-start">
-        <form action="cadastro.php" method="post">
-            <label class="form-label">E-MAIL</label>
-            <input class="form-control" type="email" name="email" required placeholder="digite o seu e-mail"/>
-            <br>
-            <label class="form-label">NOME</label>
-            <input class="form-control" type="text" name="nome" required placeholder="digite o seu nome"/>
-            <br>
-             <label class="form-label">GENERO</label>
-            <select class="form-select" aria-label="Selecione seu genero" name="genero" required>
-            <option selected>Selecione seu genero</option>
-            <option value="Masculino">Masculino</option>
-            <option value="Feminino">Feminino</option>
-            <option value="Outros">Outros</option>
-            </select>
-            <br>
-             <label class="form-label">SENHA</label>
-            <input class="form-control" type="password" name="senha" required placeholder="digite o sua senha"/>
-            <br>
-            <input type="submit" class="btn btn-purple" value="CADASTRAR">
-        </form>  
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">CANCELAR</button>
-      </div>
     </div>
-  </div> 
-</div>
-    </body>
+</body>
 </html>
 
-<script language='javascript' type='text/javascript'>
-    function atualizardados(gemail, gsenha, gnome, ggenero) {
-        let email = document.getElementByID("email")
-        let senha = document.getElementByID("senha")
-        let nome = document.getElementByID("nome")
-        let genero = document.getElementByID("genero")
-        let buttongm = document.getElementByID("buttonhj")
-        email.value = gemail
-        senha.value = gsenha
-        nome.value = gnome
-        genero.value = ggenero
+<script language="javascript" type="text/javascript">
+    const url = "editar.php?id=";
+    const email = document.getElementById("email");
+    const nome = document.getElementById("nome");
+    const genero = document.getElementById("floatingSelect");
+    const form = document.getElementById("form_edit");
+    const senha = document.getElementById("senha");
 
+    function atualizarformulario(id, vemail, vnome, vgenero, vsenha) {
+        email.value = vemail;
+        nome.value = vnome;
+        genero.value = vgenero;
+        form.action = url+id;
+        senha.value = vsenha;
     }
-</scnome
+
+
+</script>
